@@ -44,6 +44,8 @@ void atribui_posicoes_estatica(NoEstatico lista[], int inicio);
 void inicializa_dinamica(No **inicio);
 int insere_dinamica(No **inicio, Atleta a);
 void imprime_dinamica(No *inicio);
+int busca_dinamica(No *inicio, int numeroPeito);
+int remove_dinamica(No **inicio, int numeroPeito);
 void atribui_posicoes_dinamica(No *inicio);
 void libera_dinamica(No **inicio);
 
