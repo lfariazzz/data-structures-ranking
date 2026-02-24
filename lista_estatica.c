@@ -37,14 +37,16 @@ int insere_estatica(NoEstatico lista[], int *inicio, int *disponivel, Atleta a) 
 
 void imprime_estatica(NoEstatico lista[], int inicio) {
     int i = inicio;
-    printf("\n--- RANKING DE ATLETAS (LISTA ESTATICA) ---\n");
+    int rank = 1; // Contador para exibir a posição atual
+    printf("\n--- RANKING OFICIAL UFCA ---\n");
     while (i != -1) {
-        printf("Numero: %d | Nome: %-15s | Tempo: %.2fs | Pace: %.2f\n",
-                lista[i].dado.numeroPeito,
+        printf("%dº | Nome: %-15s | Dist: %.1fkm | Tempo: %.2fs | Pace: %.2f min/km\n",
+                rank++,
                 lista[i].dado.nome,
+                lista[i].dado.distanciaKM,
                 lista[i].dado.tempoSegundos,
                 lista[i].dado.pace);
         i = lista[i].proximo;
     }
-    printf("-------------------------------------------\n");
+    printf("----------------------------\n");
 }

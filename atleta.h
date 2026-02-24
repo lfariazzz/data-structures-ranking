@@ -5,55 +5,61 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* 1. Definição do Objeto Real [cite: 17, 20] */
+#define MAX 10000 // Capacidade para testes de volume
+
+// --- ESTRUTURAS ---
 typedef struct {
     int numeroPeito;
     char nome[50];
-    double tempoSegundos; // Critério de ordenação 1
-    double pace;          // Critério de ordenação 2
+    double distanciaKM;
+    double tempoSegundos;
+    double pace;          // min/km
+    int posicao;          // Definida após ordenação
 } Atleta;
 
-/* 2. Estrutura para Lista Encadeada Dinâmica [cite: 26] */
-typedef struct No {
+typedef struct No { // Dinâmica
     Atleta dado;
     struct No *proximo;
 } No;
 
-/* 3. Estrutura para Lista Encadeada Estática  */
-#define MAX 10000 // Volume exigido para testes grandes [cite: 36]
-typedef struct {
+typedef struct { // Estática
     Atleta dado;
-    int proximo; // Índice para o próximo elemento
+    int proximo;
 } NoEstatico;
 
-/* 4. Funções de Gerenciamento das Listas [cite: 27, 28] */
+// --- PROTÓTIPOS ---
 
-// Dinâmica
-void inicializa_dinamica(No **inicio);
-int insere_dinamica(No **inicio, Atleta a);
-void imprime_dinamica(No *inicio);
-void libera_dinamica(No **inicio);
+// atleta.c (Regras de Negócio)
+void calcula_pace(Atleta *a);
 
-// Estática (Gerenciamento manual de posições livres )
+// lista_estatica.c (Gerenciamento de Vetor)
 void inicializa_estatica(NoEstatico lista[], int *inicio, int *disponivel);
 int insere_estatica(NoEstatico lista[], int *inicio, int *disponivel, Atleta a);
 void imprime_estatica(NoEstatico lista[], int inicio);
+void atribui_posicoes_estatica(NoEstatico lista[], int inicio);
 
-/* 5. Algoritmos de Ordenação a Implementar [cite: 24] */
-/* Critério: 1 para Tempo, 2 para Pace  */
+// lista_dinamica.c (Gerenciamento de Memória)
+void inicializa_dinamica(No **inicio);
+int insere_dinamica(No **inicio, Atleta a);
+void imprime_dinamica(No *inicio);
+void atribui_posicoes_dinamica(No *inicio);
+void libera_dinamica(No **inicio);
 
-// Versões para Lista Dinâmica
-void bubble_sort_dinamico(No **inicio, int criterio);
-void insertion_sort_dinamico(No **inicio, int criterio);
-void selection_sort_dinamico(No **inicio, int criterio);
-void quick_sort_dinamico(No **inicio, int criterio);
-void merge_sort_dinamico(No **inicio, int criterio);
+// sorts.c (TODOS os Algoritmos)
+// Critério: Sempre pelo menor Tempo (tempoSegundos)
 
-// Versões para Lista Estática
-void bubble_sort_estatico(NoEstatico lista[], int inicio, int criterio);
-void insertion_sort_estatico(NoEstatico lista[], int inicio, int criterio);
-void selection_sort_estatico(NoEstatico lista[], int inicio, int criterio);
-void quick_sort_estatico(NoEstatico lista[], int inicio, int criterio);
-void merge_sort_estatico(NoEstatico lista[], int inicio, int criterio);
+// Estáticos
+void bubble_sort_estatico(NoEstatico lista[], int inicio);
+void selection_sort_estatico(NoEstatico lista[], int inicio);
+void insertion_sort_estatico(NoEstatico lista[], int inicio);
+void quick_sort_estatico(NoEstatico lista[], int inicio, int fim_logico);
+void merge_sort_estatico(NoEstatico lista[], int inicio, int fim_logico);
+
+// Dinâmicos
+void bubble_sort_dinamico(No *inicio);
+void selection_sort_dinamico(No *inicio);
+void insertion_sort_dinamico(No *inicio);
+void quick_sort_dinamico(No *inicio, No *fim);
+void merge_sort_dinamico(No **inicio);
 
 #endif
