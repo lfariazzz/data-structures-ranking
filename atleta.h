@@ -36,6 +36,8 @@ void calcula_pace(Atleta *a);
 void inicializa_estatica(NoEstatico lista[], int *inicio, int *disponivel);
 int insere_estatica(NoEstatico lista[], int *inicio, int *disponivel, Atleta a);
 void imprime_estatica(NoEstatico lista[], int inicio);
+int busca_estatica(NoEstatico lista[], int inicio, int numeroPeito);
+int remove_estatica(NoEstatico lista[], int *inicio, int *disponivel, int numeroPeito);
 void atribui_posicoes_estatica(NoEstatico lista[], int inicio);
 
 // lista_dinamica.c (Gerenciamento de Memória)

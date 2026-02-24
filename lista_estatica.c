@@ -39,3 +39,32 @@ void imprime_estatica(NoEstatico lista[], int inicio) {
         i = lista[i].proximo;
     }
 }
+
+int busca_estatica(NoEstatico lista[], int inicio, int numeroPeito) {
+    int i = inicio;
+    while (i != -1) s{
+        if (lista[i].dado.numeroPeito == numeroPeito) {
+            return i;
+        }
+        i = lista[i].proximo;
+    }
+    return -1;
+}
+
+int remove_estatica(NoEstatico lista[], int *inicio, int *disponivel, int numeroPeito) {
+    int i = *inicio;
+    int anterior = -1;
+    while (i != -1 && lista[i].dado.numeroPeito != numeroPeito) {
+        anterior = i;
+        i = lista[i].proximo;
+    }
+    if (i == -1) return 0;
+    if (anterior == -1) {
+        *inicio = lista[i].proximo;
+    } else {
+        lista[anterior].proximo = lista[i].proximo;
+    }
+    lista[i].proximo = *disponivel;
+    *disponivel = i;
+    return 1;
+}
