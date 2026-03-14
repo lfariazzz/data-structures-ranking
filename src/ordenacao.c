@@ -108,6 +108,7 @@ long selection_sort(Atleta *v, int n, FuncComparacao cmp) {
     return comparacoes;
 }
 
+// Implementação do merge_sort
 long _merge_sort_rec(Atleta *v, Atleta *aux, int esq, int dir, FuncComparacao cmp) {
     long comparacoes = 0;
     if (esq >= dir)
