@@ -178,3 +178,22 @@ void mergeSortEstatico(NoEstatico lista[], int *inicio, int criterio) {
 
     *inicio = merge_estatica(lista, esquerda, direita, criterio);
 }
+
+long insertion_sort(Atleta *v, int n, FuncComparacao cmp) {
+    long comparacoes = 0;
+    for (int i = 1; i < n; i++) {
+        Atleta chave = v[i];
+        int j = i - 1;
+        while (j >= 0) {
+            comparacoes++;
+            if (cmp(&v[j], &chave) > 0) {
+                v[j+1] = v[j];
+                j--;
+            } else {
+                break;
+            }
+        }
+        v[j+1] = chave;
+    }
+    return comparacoes;
+}
