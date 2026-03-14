@@ -1,98 +1,146 @@
-#include "atleta.h"
+#include "lista_dinamica.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-// 1. Inicializa: Apenas aponta o inÌcio para o vazio (NULL)
-void inicializa_dinamica(No **inicio) {
-    *inicio = NULL;
+// Implementa√ß√£o da Lista Encadeada Din√¢mica
+
+void ld_inicializa(ListaDinamica *lista) {
+    lista->cabeca   = NULL;
+    lista->tamanho  = 0;
 }
 
-// 2. Insere: Pede memÛria ao sistema e coloca o novo nÛ no topo
-int insere_dinamica(No **inicio, Atleta a) {
-    // Aloca espaÁo para um No na memÛria RAM
+// Insere no INICIO: O(1)
+int ld_insere_inicio(ListaDinamica *lista, Atleta atleta) {
     No *novo = (No *) malloc(sizeof(No));
-
-    // Verifica se o computador conseguiu dar a memÛria
-    if (novo == NULL) return 0;
-
-    novo->dado = a;
-
-    // O novo nÛ aponta para quem era o antigo primeiro
-    novo->proximo = *inicio;
-
-    // O ponteiro de inÌcio agora aponta para este novo nÛ
-    *inicio = novo;
-
+    if (novo == NULL) {
+        fprintf(stderr, "[ERRO] ld_insere_inicio: malloc falhou.\n");
+        return 0;
+    }
+    novo->dado = atleta;
+    novo->prox = lista->cabeca;
+    lista->cabeca = novo;
+    lista->tamanho++;
     return 1;
 }
 
-// 3. Busca: Percorre a RAM atÈ achar o n˙mero de peito
-int busca_dinamica(No *inicio, int numeroPeito) {
-    No *aux = inicio;
-    while (aux != NULL) {
-        if (aux->dado.numeroPeito == numeroPeito) {
-            return 1; // Encontrou
-        }
-        aux = aux->proximo;
+// Insere no FIM: O(n)
+int ld_insere_fim(ListaDinamica *lista, Atleta atleta) {
+    No *novo = (No *) malloc(sizeof(No));
+    if (novo == NULL) {
+        fprintf(stderr, "[ERRO] ld_insere_fim: malloc falhou.\n");
+        return 0;
     }
-    return 0; // N„o encontrou
-}
+    novo->dado = atleta;
+    novo->prox = NULL;
 
-// 4. Remove: Desconecta o nÛ e usa o FREE para devolver a memÛria
-int remove_dinamica(No **inicio, int numeroPeito) {
-    No *atual = *inicio;
-    No *anterior = NULL;
-
-    while (atual != NULL && atual->dado.numeroPeito != numeroPeito) {
-        anterior = atual;
-        atual = atual->proximo;
-    }
-
-    if (atual == NULL) return 0; // Atleta n„o est· na lista
-
-    if (anterior == NULL) {
-        // RemoÁ„o do primeiro da lista
-        *inicio = atual->proximo;
+    if (lista->cabeca == NULL) {
+        lista->cabeca = novo;
     } else {
-        // Pula o nÛ que ser· removido
-        anterior->proximo = atual->proximo;
+        No *atual = lista->cabeca;
+        while (atual->prox != NULL)
+            atual = atual->prox;
+        atual->prox = novo;
     }
-
-    free(atual); // Devolve o espaÁo para a RAM (o "lixeiro" do C)
+    lista->tamanho++;
     return 1;
 }
 
-// 5. Atribui PosiÁıes: Essencial para o ranking final da UFCA
-void atribui_posicoes_dinamica(No *inicio) {
-    No *aux = inicio;
-    int p = 1;
-    while (aux != NULL) {
-        aux->dado.posicao = p++;
-        aux = aux->proximo;
+// Imprime a lista no formato "Posicao | Nome | Tempo | Pace"
+void ld_imprime(const ListaDinamica *lista) {
+    if (lista->cabeca == NULL) {
+        printf("[Lista dinamica vazia]\n");
+        return;
     }
+    printf("=== Lista Dinamica (%d atletas) ===\n", lista->tamanho);
+    No *atual = lista->cabeca;
+    int i = 1;
+    while (atual != NULL) {
+        printf("%3d. ", i++);
+        imprimir_atleta(&atual->dado);
+        atual = atual->prox;
+    }
+    printf("===================================\n");
 }
 
-// 6. Imprime: Gera o relatÛrio para o console
-void imprime_dinamica(No *inicio) {
-    No *aux = inicio;
-    printf("\n--- RANKING OFICIAL (DINAMICO) ---\n");
-    if (inicio == NULL) printf("Lista vazia.\n");
-
-    while (aux != NULL) {
-        printf("%d∫ | %-15s | Pace: %.2f | Tempo: %.1fs\n",
-               aux->dado.posicao,
-               aux->dado.nome,
-               aux->dado.pace,
-               aux->dado.tempoSegundos);
-        aux = aux->proximo;
+// Busca por numero do dorsal: O(n)
+No *ld_busca(const ListaDinamica *lista, int numero) {
+    No *atual = lista->cabeca;
+    while (atual != NULL) {
+        if (atual->dado.numero == numero)
+            return atual;
+        atual = atual->prox;
     }
+    return NULL;
 }
 
-// 7. Libera: Limpa a RAM inteira antes de fechar o programa
-void libera_dinamica(No **inicio) {
-    No *aux;
-    while (*inicio != NULL) {
-        aux = *inicio;
-        *inicio = (*inicio)->proximo;
-        free(aux);
+// Remove por numero do dorsal: O(n)
+int ld_remove(ListaDinamica *lista, int numero) {
+    if (lista->cabeca == NULL)
+        return 0;
+
+    // Caso especial: remover o primeiro n√≥
+    if (lista->cabeca->dado.numero == numero) {
+        No *temp = lista->cabeca;
+        lista->cabeca = lista->cabeca->prox;
+        free(temp);
+        lista->tamanho--;
+        return 1;
     }
-    *inicio = NULL;
+
+    // Busca pelo n√≥ anterior ao que queremos remover
+    No *anterior = lista->cabeca;
+    while (anterior->prox != NULL &&
+           anterior->prox->dado.numero != numero) {
+        anterior = anterior->prox;
+    }
+
+    if (anterior->prox == NULL)
+        return 0; // N√£o encontrado
+
+    No *alvo = anterior->prox;
+    anterior->prox = alvo->prox;
+    free(alvo);
+    lista->tamanho--;
+    return 1;
+}
+
+// Libera toda a mem√≥ria alocada para a lista
+void ld_libera(ListaDinamica *lista) {
+    No *atual = lista->cabeca;
+    while (atual != NULL) {
+        No *prox = atual->prox;
+        free(atual);
+        atual = prox;
+    }
+    lista->cabeca  = NULL;
+    lista->tamanho = 0;
+}
+
+// Converte a lista para um vetor (usado para ordenacao)
+int ld_para_vetor(const ListaDinamica *lista, Atleta *vetor, int max) {
+    int i = 0;
+    No *atual = lista->cabeca;
+    while (atual != NULL && i < max) {
+        vetor[i++] = atual->dado;
+        atual = atual->prox;
+    }
+    return i;
+}
+
+// Reconstr√≥i a lista a partir de um vetor ordenado
+void ld_de_vetor(ListaDinamica *lista, const Atleta *vetor, int n) {
+    ld_libera(lista);
+    for (int i = 0; i < n; i++)
+        ld_insere_fim(lista, vetor[i]);
+}
+
+// Recalcula posicoes com base na ordem atual da lista
+void ld_atualizar_posicoes(ListaDinamica *lista) {
+    No *atual = lista->cabeca;
+    int pos = 1;
+    while (atual != NULL) {
+        atual->dado.posicao = pos++;
+        atual = atual->prox;
+    }
 }
