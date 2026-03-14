@@ -1,67 +1,15 @@
+#include "ordenacao.h"
 #include "atleta.h"
-
-/**
- * Bubble Sort para Lista Dinâmica.
- * Ordena por tempoSegundos (crescente).
- */
-void bubble_sort_dinamico(No *inicio) {
-    if (inicio == NULL || inicio->proximo == NULL) return;
-
-    int trocou;
-    No *atual;
-    No *ultimo = NULL;
-
-    do {
-        trocou = 0;
-        atual = inicio;
-
-        while (atual->proximo != ultimo) {
-            // Critério de Aceite: Menor tempo primeiro
-            if (atual->dado.tempoSegundos > atual->proximo->dado.tempoSegundos) {
-                Atleta temp = atual->dado;
-                atual->dado = atual->proximo->dado;
-                atual->proximo->dado = temp;
-                trocou = 1;
-            }
-            atual = atual->proximo;
-        }
-        ultimo = atual;
-    } while (trocou);
-}
-
-/**
- * Bubble Sort para Lista Estática.
- * Ordena por tempoSegundos (crescente).
- */
-void bubble_sort_estatico(NoEstatico lista[], int inicio) {
-    if (inicio == -1) return;
-
-    int trocou;
-    int i;
-    int ultimo = -1;
-
-    do {
-        trocou = 0;
-        i = inicio;
-
-        while (lista[i].proximo != -1 && lista[i].proximo != ultimo) {
-            int prox = lista[i].proximo;
-
-            // Critério de Aceite: Menor tempo primeiro
-            if (lista[i].dado.tempoSegundos > lista[prox].dado.tempoSegundos) {
-                Atleta temp = lista[i].dado;
-                lista[i].dado = lista[prox].dado;
-                lista[prox].dado = temp;
-                trocou = 1;
-            }
-            i = lista[i].proximo;
-        }
-        ultimo = i;
-    } while (trocou);
-}
 #include <stdio.h>
 #include <stdlib.h>
-#include "atleta.h"
+#include <string.h>
+
+// Função auxiliar para trocar dois Atletas
+static inline void trocar(Atleta *a, Atleta *b) {
+    Atleta tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
 
 // --- DEFINIÇÕES QUE DEVERIAM ESTAR NO .H MAS VAMOS COLOCAR AQUI ---
 
@@ -179,6 +127,7 @@ void mergeSortEstatico(NoEstatico lista[], int *inicio, int criterio) {
     *inicio = merge_estatica(lista, esquerda, direita, criterio);
 }
 
+// Implementação do insertion_sort
 long insertion_sort(Atleta *v, int n, FuncComparacao cmp) {
     long comparacoes = 0;
     for (int i = 1; i < n; i++) {
@@ -198,24 +147,26 @@ long insertion_sort(Atleta *v, int n, FuncComparacao cmp) {
     return comparacoes;
 }
 
+
+// Implementação do quick_sort
 long _quick_sort_rec(Atleta *v, int esq, int dir, FuncComparacao cmp) {
     long comparacoes = 0;
     if (esq >= dir)
         return 0;
 
-    /* Pivo: elemento do meio — evita pior caso em listas ordenadas */
+    // Escolhe o pivô (aqui usando o elemento do meio)    
     Atleta pivo = v[(esq + dir) / 2];
     int i = esq;
     int j = dir;
 
     while (i <= j) {
-        /* Avanca i enquanto v[i] < pivo */
+        // Avança i enquanto v[i] < pivo
         while (1) {
             comparacoes++;
             if (cmp(&v[i], &pivo) < 0) i++;
             else break;
         }
-        /* Recua j enquanto v[j] > pivo */
+        // Recua j enquanto v[j] > pivo
         while (1) {
             comparacoes++;
             if (cmp(&v[j], &pivo) > 0) j--;
@@ -238,6 +189,7 @@ long quick_sort(Atleta *v, int n, FuncComparacao cmp) {
     return _quick_sort_rec(v, 0, n - 1, cmp);
 }
 
+// Implementação do bubble_sort
 long bubble_sort(Atleta *v, int n, FuncComparacao cmp) {
     long comparacoes = 0;
     for (int i = 0; i < n - 1; i++) {
@@ -250,11 +202,12 @@ long bubble_sort(Atleta *v, int n, FuncComparacao cmp) {
             }
         }
         if (!trocou)
-            break; /* Vetor ja ordenado — otimizacao do melhor caso */
+            break; // Otimização: se não houve trocas, o vetor já está ordenado
     }
     return comparacoes;
 }
 
+// Implementação do selection_sort 
 long selection_sort(Atleta *v, int n, FuncComparacao cmp) {
     long comparacoes = 0;
     for (int i = 0; i < n - 1; i++) {
