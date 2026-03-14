@@ -254,3 +254,18 @@ long bubble_sort(Atleta *v, int n, FuncComparacao cmp) {
     }
     return comparacoes;
 }
+
+long selection_sort(Atleta *v, int n, FuncComparacao cmp) {
+    long comparacoes = 0;
+    for (int i = 0; i < n - 1; i++) {
+        int idx_min = i;
+        for (int j = i + 1; j < n; j++) {
+            comparacoes++;
+            if (cmp(&v[j], &v[idx_min]) < 0)
+                idx_min = j;
+        }
+        if (idx_min != i)
+            trocar(&v[i], &v[idx_min]);
+    }
+    return comparacoes;
+}
