@@ -197,3 +197,43 @@ long insertion_sort(Atleta *v, int n, FuncComparacao cmp) {
     }
     return comparacoes;
 }
+
+long _quick_sort_rec(Atleta *v, int esq, int dir, FuncComparacao cmp) {
+    long comparacoes = 0;
+    if (esq >= dir)
+        return 0;
+
+    /* Pivo: elemento do meio — evita pior caso em listas ordenadas */
+    Atleta pivo = v[(esq + dir) / 2];
+    int i = esq;
+    int j = dir;
+
+    while (i <= j) {
+        /* Avanca i enquanto v[i] < pivo */
+        while (1) {
+            comparacoes++;
+            if (cmp(&v[i], &pivo) < 0) i++;
+            else break;
+        }
+        /* Recua j enquanto v[j] > pivo */
+        while (1) {
+            comparacoes++;
+            if (cmp(&v[j], &pivo) > 0) j--;
+            else break;
+        }
+        if (i <= j) {
+            trocar(&v[i], &v[j]);
+            i++;
+            j--;
+        }
+    }
+
+    comparacoes += _quick_sort_rec(v, esq, j, cmp);
+    comparacoes += _quick_sort_rec(v, i, dir, cmp);
+    return comparacoes;
+}
+
+long quick_sort(Atleta *v, int n, FuncComparacao cmp) {
+    if (n <= 1) return 0;
+    return _quick_sort_rec(v, 0, n - 1, cmp);
+}
