@@ -13,7 +13,7 @@ static inline void trocar(Atleta *a, Atleta *b) {
 
 
 // Implementação do insertion_sort
-long insertion_sort(Atleta *v, int n, FuncComparacao cmp) {
+long insertion_sort(Atleta *v, int n, CmpFn cmp) {
     long comparacoes = 0;
     for (int i = 1; i < n; i++) {
         Atleta chave = v[i];
@@ -34,7 +34,7 @@ long insertion_sort(Atleta *v, int n, FuncComparacao cmp) {
 
 
 // Implementação do quick_sort
-long _quick_sort_rec(Atleta *v, int esq, int dir, FuncComparacao cmp) {
+long _quick_sort_rec(Atleta *v, int esq, int dir, CmpFn cmp) {
     long comparacoes = 0;
     if (esq >= dir)
         return 0;
@@ -69,13 +69,13 @@ long _quick_sort_rec(Atleta *v, int esq, int dir, FuncComparacao cmp) {
     return comparacoes;
 }
 
-long quick_sort(Atleta *v, int n, FuncComparacao cmp) {
+long quick_sort(Atleta *v, int n, CmpFn cmp) {
     if (n <= 1) return 0;
     return _quick_sort_rec(v, 0, n - 1, cmp);
 }
 
 // Implementação do bubble_sort
-long bubble_sort(Atleta *v, int n, FuncComparacao cmp) {
+long bubble_sort(Atleta *v, int n, CmpFn cmp) {
     long comparacoes = 0;
     for (int i = 0; i < n - 1; i++) {
         int trocou = 0;
@@ -93,7 +93,7 @@ long bubble_sort(Atleta *v, int n, FuncComparacao cmp) {
 }
 
 // Implementação do selection_sort 
-long selection_sort(Atleta *v, int n, FuncComparacao cmp) {
+long selection_sort(Atleta *v, int n, CmpFn cmp) {
     long comparacoes = 0;
     for (int i = 0; i < n - 1; i++) {
         int idx_min = i;
@@ -109,7 +109,7 @@ long selection_sort(Atleta *v, int n, FuncComparacao cmp) {
 }
 
 // Implementação do merge_sort
-long _merge_sort_rec(Atleta *v, Atleta *aux, int esq, int dir, FuncComparacao cmp) {
+long _merge_sort_rec(Atleta *v, Atleta *aux, int esq, int dir, CmpFn cmp) {
     long comparacoes = 0;
     if (esq >= dir)
         return 0;
@@ -140,7 +140,7 @@ long _merge_sort_rec(Atleta *v, Atleta *aux, int esq, int dir, FuncComparacao cm
     return comparacoes;
 }
 
-long merge_sort(Atleta *v, int n, FuncComparacao cmp) {
+long merge_sort(Atleta *v, int n, CmpFn cmp) {
     if (n <= 1) return 0;
     Atleta *aux = (Atleta *) malloc(n * sizeof(Atleta));
     if (aux == NULL) {
