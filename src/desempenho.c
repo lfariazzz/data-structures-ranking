@@ -179,7 +179,7 @@ void executar_bateria_completa(int repeticoes) {
         int n = volumes[vi];
         fprintf(stderr, "[INFO] Testando n=%d...\n", n);
         for (int ai = 0; ai < n_algos; ai++) {
-            if (n >= 10000 && ai <= 2) continue;
+            // if (n >= 10000 && ai <= 2) continue;
             int rep = repeticoes_para(ai, n, repeticoes);
             fprintf(stderr, "  %s (%d reps)\n", algos[ai].nome, rep);
             for (int ei = 0; ei < n_entradas; ei++) {
