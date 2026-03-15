@@ -2,6 +2,11 @@
 
 Este projeto foi desenvolvido para a disciplina de Estrutura de Dados na **UFCA**. O objetivo é gerenciar um ranking de competições de atletismo, comparando o desempenho de diversos algoritmos de ordenação aplicados sobre listas **Encadeadas Estáticas** (vetores) e **Dinâmicas** (ponteiros).
 
+## 📄 Artigo Técnico
+Acesse a análise completa: **[PDF: Análise de Desempenho](./artigo_final_v2.pdf)**
+
+Este estudo fundamenta o projeto e identifica o **Merge Sort** como o algoritmo ideal para rankings ao vivo, garantindo previsibilidade $O(n \log n)$ e estabilidade nos resultados.
+
 ## ⚠️ Recomendação de Ambiente (VS Code + Windows)
 
 Para garantir que o projeto compile sem erros de linkagem ou bibliotecas ausentes, **recomenda-se fortemente o uso do MSYS2** como ambiente de desenvolvimento integrado ao VS Code.
